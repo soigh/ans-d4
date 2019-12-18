@@ -1,0 +1,15 @@
+---
+# tasks file for nginx-test
+#- name: Check
+#  shell: curl localhost
+#  register: ng
+#
+#- name: nvm
+#  debug: msg="{{ ng }}"
+#
+- name: Gathering Info about Nginx
+  shell: systemctl status nginx | grep running
+  register: nginx_output
+
+- name: Printing Nginx Status
+  debug: msg="{{ nginx_output.stdout }}"

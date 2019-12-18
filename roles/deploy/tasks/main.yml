@@ -1,0 +1,34 @@
+---
+# tasks file for deploy
+- name: Deploy
+  deploy:
+   user: admin
+   password: tomcat
+   war: "/vagrant/hello-war/target/mnt-lab.war"
+   url: "http://127.0.0.1:80/manager/text/deploy?path=/mnt-lab&update=true"
+  register: deploy_stat
+
+- name: Deploy info
+  shell: |
+    echo $(date +"%T") $(whoami) > '{{ tomcat_home }}'/webapps/deploy-info.txt
+  args:
+    executable: /bin/bash
+  become: yes
+
+- name: Deploy status
+  debug: msg="{{deploy_stat}}"
+
+#- name: mnt-lab is reacheble
+#  uri:
+#    url: http://127.0.0.1:80/mnt-lab/
+#    return_content: yes
+#    status_code: 500
+#  register: mntlab
+
+- name: Checking the app
+  shell: curl localhost:80/mnt-lab/
+  become: yes
+  register: check
+
+- name: Deploy Details
+  debug: msg="{{check.stdout}}"

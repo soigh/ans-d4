@@ -1,0 +1,37 @@
+- name: Web Server Provisioning
+  hosts: localhost
+
+  vars:
+   option: started
+
+  tasks:
+  - name: debug
+    debug:
+     msg: "Launched with option: {{option}}"
+
+  - name: Vagrant Provisioning
+    easy_custom_module:
+     path: 'Vagrantfile'
+     state: '{{option}}'
+    register: variables
+  - debug:
+     msg: '{{variables}}'
+  - add_host:
+     name: nodesoi
+     ansible_host: '{{variables.ip}}'
+     ansible_port: '{{variables.port}}'
+     ansible_user: '{{variables.user}}'
+     ansible_connection: 'ssh'
+     ansible_ssh_private_key_file: '{{variables.key}}'
+    when: variables.status == "running"
+ 
+- name: Installing software/Deploy
+  hosts: nodesoi
+  roles:
+#  - java
+#  - java-test
+#  - tomcat
+#  - tomcat-test
+#  - nginx
+#  - nginx-test     
+  - deploy

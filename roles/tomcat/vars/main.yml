@@ -1,0 +1,9 @@
+---
+# vars file for tomcat
+tomcat_version: 8.5.50
+tomcat_home: /opt/apache/tomcat
+tomcat_user: tomcat
+tomcat_group: tomcat
+tomcat_url: http://mirror.linux-ia64.org/apache/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz
+tomcat_user_id: 950
+tomcat_group_id: 950

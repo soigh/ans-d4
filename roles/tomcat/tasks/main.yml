@@ -1,0 +1,56 @@
+---
+# tasks file for tomcat
+- name: Add Tomcat Group
+  become: yes
+  group:
+   name: "{{ tomcat_group }}"
+   gid: "{{ tomcat_group_id }}"
+    
+- name: Add Tomcat User
+  become: yes
+  user:
+   name: "{{ tomcat_user }}"
+   comment: "Tomcat Web Application Server"
+   uid: "{{ tomcat_user_id }}"
+   group: "{{ tomcat_group }}"
+
+- name: Create Tomcat Home Folder
+  become: yes
+  file:
+   path: "{{ tomcat_home }}"
+   state: directory
+   mode: 0755
+
+- name: Unarchive Tomcat
+  become: yes
+  unarchive:
+   src: "{{ tomcat_url }}"
+   dest: "{{ tomcat_home }}"
+   owner: "{{ tomcat_user }}"
+   group: "{{ tomcat_group }}"
+   remote_src: yes
+
+- name: Copy Systemd File
+  become: yes
+  copy:
+   src: tomcat.service
+   dest: /etc/systemd/system/tomcat.service
+
+- name: Create a Link
+  become: yes
+  file:
+   src: "{{ tomcat_home }}/apache-tomcat-{{ tomcat_version }}"
+   path: "{{ tomcat_home }}/current"
+   state: link
+
+- name: Add Users gui
+  script: add_user_tomcat.sh
+  become: yes
+
+- name: Enabling Tomcat Service
+  shell: systemctl enable tomcat
+  become: yes
+
+- name: Starting Tomcat Service
+  shell: systemctl start tomcat
+  become: yes

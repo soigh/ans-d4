@@ -1,0 +1,8 @@
+---
+# tasks file for java-test
+- name: Gathering Info about Java Version
+  shell: java -version 2>&1 | grep "{{ java_version }}"
+  register: java_output
+
+- name: Printing Java Version
+  debug: msg="{{ java_output.stdout }}"

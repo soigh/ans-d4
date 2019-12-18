@@ -1,0 +1,3 @@
+---
+# vars file for deploy
+tomcat_home: /opt/apache/tomcat/apache-tomcat-8.5.50/
